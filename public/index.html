@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" media="screen" charset="utf-8">
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+  <title>jQuery Miller Columns</title>
+  <style type="text/css" media="screen">
+    body {
+      background: #f9f9f9;
+    }
+  
+    #miller-control {
+      background: #fff;
+      margin: 0px;
+      padding: 0px;
+      border-bottom: 1px solid #E5E5E5;
+      height: 160px;
+      overflow: scroll;
+      
+      -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, .065);
+      -moz-box-shadow: 0 1px 4px rgba(0,0,0,.065);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, .065);
+    }
+    
+    .nav-horizontal-scroll-container {
+      margin: 0;
+      padding: 0;
+      width: 1000000px;
+    }
+    
+    .nav-miller {
+      width: 228px;
+      height: 160px;
+      margin: 0;
+      padding: 0;
+      background-color: white;
+      border-right: 1px solid #E5E5E5;
+      
+      float: left;
+      overflow: scroll;
+    }
+    
+    .nav-miller > .active > a {
+      position: relative;
+      z-index: 2;
+      padding: 8px 14px;
+      border: 0;
+      text-shadow: 0 1px 0 rgba(0, 0, 0, .15);
+      
+      -webkit-box-shadow: inset 1px 0 0 rgba(0, 0, 0, .1), inset -1px 0 0 rgba(0, 0, 0, .1);
+      -moz-box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
+      box-shadow: inset 1px 0 0 rgba(0, 0, 0, .1), inset -1px 0 0 rgba(0, 0, 0, .1);
+    }
+    
+    .nav-miller > li > a {
+      display: block;
+      margin: 0 0 -1px;
+      padding: 8px 14px;
+    }
+    
+    .nav-miller .active .icon-chevron-right, 
+    .nav-miller .active a:hover .icon-chevron-right {
+      opacity: 1;
+    }
+    
+    .nav-miller .icon-chevron-right {
+      float: right;
+      margin-top: 2px;
+      margin-right: -6px;
+      opacity: .25;
+    }
+  </style>
+</head>
+<body id="main">
+  <div id="miller-control">
+    <div class="nav-horizontal-scroll-container">
+    </div>
+  </div>
+  <script type="text/javascript">
+    function popColumns(columnid) {
+      var found = false;
+      $("#miller-control div ul").each(function(i, e) {
+          if (found)
+            $(e).remove();
+          
+          if ($(e).attr('id') == columnid) {
+            found = true;
+          }
+      });
+    }
+  
+    function nodeClick(self) {
+      var li = self.parent();
+      
+      li.siblings().removeClass('active');
+      li.addClass('active');
+      
+      popColumns(li.parent().attr('id'));
+      loadData(self.attr('id'));
+      
+      return false;
+    }
+  
+    function loadData(nodeid) {
+      var ul = $("<ul />").attr('class', 'nav nav-list nav-miller').appendTo("#miller-control div");
+      ul.attr('id', nodeid);
+      
+      for (i=1; i<10; i++) {
+        var id = nodeid + '' + i;
+        if (nodeid == '0') {
+          id = i + '';
+        }
+        
+        var li = $("<li />");
+        var a = $("<a />");
+        a.attr('id', id);
+        a.attr('href', '#');
+        a.html('<i class="icon-chevron-right"></i>Level ' + id);
+        a.click(function() {
+          var self = $(this);
+          nodeClick(self);
+        });
+        li.append(a);
+        
+        ul.append(li);
+      }
+      
+      //TODO: Fix scroll left according to column level (currently open columns) times column width
+      $("#miller-control").scrollLeft(ul.position().left);
+    }
+  
+    $(function() {
+      loadData('0');
+    });
+  </script>
+</body>
+</html>

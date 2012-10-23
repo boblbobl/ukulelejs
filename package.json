@@ -1,0 +1,12 @@
+{
+  "name": "Ukulele",
+  "description": "Ukulele is a Minimal Content Management System (CMS) built on top of Node.js",
+  "version": "0.0.1",
+  "dependencies": {
+    "express": "2.5.x"
+  },
+  "engines": {
+    "node": "0.8.x",
+    "npm": "1.1.x"
+  }
+}
